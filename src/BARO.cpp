@@ -30,8 +30,8 @@
 #define LPS22HB_PRESS_OUT_L_REG     0x29
 #define LPS22HB_PRESS_OUT_H_REG     0x2a
 
-#define LPS22HB_TEMP_OUT_L_REG		0x2b
-#define LPS22HB_TEMP_OUT_H_REG		0x2c
+#define LPS22HB_TEMP_OUT_L_REG      0x2b
+#define LPS22HB_TEMP_OUT_H_REG      0x2c
 
 LPS22HBClass::LPS22HBClass(TwoWire& wire) :
   _wire(&wire)
@@ -72,7 +72,7 @@ float LPS22HBClass::readPressure(P_UNIT unit)
   if (unit == PSI) {  			// 1 hPa = 0.0145038 PSI
     return reading * 0.0145038;
   } else if (unit == ATM) {  	// 1 atm = 1013.25 hPa
-	return reading / 1013.25;
+    return reading / 1013.25;
   } else {
     return reading;
   }
@@ -80,22 +80,22 @@ float LPS22HBClass::readPressure(P_UNIT unit)
 
 float LPS22HBClass::readTemperature(T_UNIT unit)
 {
-	// trigger one shot
-	  i2cWrite(LPS22HB_CTRL2_REG, 0x01);
+  // trigger one shot
+  i2cWrite(LPS22HB_CTRL2_REG, 0x01);
 
-	  // wait for completion
-	  while ((i2cRead(LPS22HB_STATUS_REG) & 0x02) == 0) {
-	    yield();
-	  }
+  // wait for completion
+  while ((i2cRead(LPS22HB_STATUS_REG) & 0x02) == 0) {
+    yield();
+  }
 
-	  float reading = (i2cRead(LPS22HB_TEMP_OUT_L_REG) |
+  float reading = (i2cRead(LPS22HB_TEMP_OUT_L_REG) |
 	          (i2cRead(LPS22HB_TEMP_OUT_H_REG) << 8)) / 100.0;
 
-	  if (unit == F) { 	// 1 Fahrenheit = (1 Celsius * 9 / 5) + 32
-		return (reading * 9.0 / 5.0) + 32.0;
-	  } else {
-		return reading;
-	  }
+  if (unit == F) { 	// 1 Fahrenheit = (1 Celsius * 9 / 5) + 32
+    return (reading * 9.0 / 5.0) + 32.0;
+  } else {
+    return reading;
+  }
 }
 
 int LPS22HBClass::i2cRead(uint8_t reg)
