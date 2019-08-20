@@ -23,10 +23,15 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-enum {
+enum P_UNIT{
+  HPA,
   PSI,
-  MILLIBAR,
-  KILOPASCAL
+  ATM
+};
+
+enum T_UNIT{
+  C,
+  F
 };
 
 class LPS22HBClass {
@@ -36,7 +41,8 @@ public:
   int begin();
   void end();
 
-  float readPressure(int units = KILOPASCAL);
+  float readPressure(P_UNIT unit = HPA);
+  float readTemperature(T_UNIT unit = C);
 
 private:
   int i2cRead(uint8_t reg);
